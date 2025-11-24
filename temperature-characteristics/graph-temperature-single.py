@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 def fun():
     #Reading data
     filename = input("Filename: ")
-        
-    #Reading PWM duty
+
     try:
         with open(filename, "r") as f:
             f.readline()
             line = f.readline()
     except Exception as e:
-        raise RuntimeError("File doesn't exist")
-
+        raise RuntimeError("File does not exist")
+    
+    #Reading PWM duty
     parts = line.strip().split(",")
     v1 = float(parts[0])
     v2 = float(parts[1])
@@ -51,6 +51,7 @@ def fun():
     baseline = np.mean(y[:window])
     threshold = baseline + 1.0
     
+    
     found_index = None
     
     for start in range(0, len(y) - window + 1):
@@ -69,7 +70,9 @@ def fun():
         print("Regline a: ", a)
         print("Regline angle: ", np.arctan(a))
         print("Regline b: ", b)
-        plt.plot(x_rise, y_reg, color="#00CD6C")
+        label = f"Δ[°C]/Δ[s] {a:.3f}"
+        plt.plot(x_rise, y_reg, color="#00CD6C", linestyle="--", label=label)
+        plt.legend()
     except Exception as e:
         print("Could not find the slope")
     
