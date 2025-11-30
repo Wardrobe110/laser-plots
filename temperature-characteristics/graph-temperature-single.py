@@ -29,7 +29,7 @@ def fun():
     
     #Processing data
     x = x - x[0]
-    x = x / 1000000;
+    x = x / 960000;
     y = y / 10.0
     
     #Initial values plot

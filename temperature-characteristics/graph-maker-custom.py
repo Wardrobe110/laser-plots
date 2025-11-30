@@ -20,7 +20,7 @@ def fun():
         raise RuntimeError("Folder does not exist")
     
     # File for saving regline results
-    results_dir = os.path.join(folder, "results")
+    results_dir = os.path.join(folder, "custom-results")
     os.makedirs(results_dir, exist_ok=True)
     output_path = os.path.join(results_dir, "reglines.txt")
     out = open(output_path, "w")
@@ -41,7 +41,8 @@ def fun():
         parts = line.strip().split(",")
         v1 = float(parts[0])
         v2 = float(parts[1])
-        pwm_duty = (v1 / v2) * 100.0
+        pwm_duty = (v1 / v2)
+        wattage = pwm_duty * 25
 
         #Reading datapoints
         data = np.genfromtxt(path, delimiter=",", skip_header=5, skip_footer=5)
@@ -52,15 +53,12 @@ def fun():
         x = data[:, 0]
         y = data[:, 1]
 
-        x = x - x[0]
+        x = x - x[0] - 5000000
         x = x / 960000
         y = y / 10.0
         
-        if color_index < len(custom_colors):
-            plt.plot(x, y, color=custom_colors[color_index],
-                     label=f"{filename} ({pwm_duty:.2f}%)")
-        else:
-            plt.plot(x, y, label=f"{filename} ({pwm_duty:.2f}%)")
+        
+        plt.plot(x, y, color=custom_colors[color_index], label=f"{wattage:.0f} [W]")
 
         color_index += 1
         
@@ -95,13 +93,13 @@ def fun():
         angle_deg = math.degrees(math.atan(a))
 
         # Save into output file
-        out.write(f"{filename}, {pwm_duty:.6f}, {a:.6f}, {b:.6f}, {angle_deg:.6f}\n")
+        out.write(f"{filename}, {wattage:.0f}, {a:.6f}, {b:.6f}, {angle_deg:.6f}\n")
         
     out.close()    
     
     plt.xlabel("Czas [s]")
     plt.ylabel("Temperatura [°C]")
-    plt.xlim(left=0)
+    plt.xlim(left=0, right=5)
     plt.ylim(bottom=0)
     plt.grid()
     plt.legend()
