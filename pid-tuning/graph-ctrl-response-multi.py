@@ -74,7 +74,7 @@ def fun():
             plt.savefig(fig_path)
             
             figure_index += 1
-            curve_counter = 0p
+            curve_counter = 0
             plt.figure()
             
         # Plotting

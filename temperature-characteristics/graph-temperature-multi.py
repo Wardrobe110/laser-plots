@@ -19,7 +19,7 @@ def fun():
     if not os.path.isdir(folder):
         raise RuntimeError("Folder does not exist")
     
-    # File for saving regline results
+    #File for saving regline results
     results_dir = os.path.join(folder, "results")
     os.makedirs(results_dir, exist_ok=True)
     output_path = os.path.join(results_dir, "reglines.txt")
